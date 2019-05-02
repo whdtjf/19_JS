@@ -187,44 +187,51 @@ let Chaincode = class {
       if (res.value && res.value.value.toString()) {
         let jsonRes = {};
 
-	// JSON 값 출력
-        console.log(res.value.value.toString('utf8'));
-	console.log(' test_1\n');
-
+	// 키를 받아옴
         jsonRes.Key = res.value.key;
         try {
+	  // 원하는 레코드를 가져옴
           jsonRes.Record = JSON.parse(res.value.value.toString('utf8'));
-	  console.log(' test_2\n');
         } catch (err) {
+	  // 만약 문제가 있다면 해당 에러를 출력함
           console.log(err);
-          console.log('help2\n');
           jsonRes.Record = res.value.value.toString('utf8');
         }
+	// 문제 없이 가져왔다면, 해당 값을 출력 배열에 넣음
         allResults.push(jsonRes);
-	//allResults.push('\n');
       }
+
+      // 만약 마지막 원소라면,
       if (res.done) {
         console.log('end of data');
         await iterator.close();
-	console.log(' test_3 :\n');
         console.info(allResults);
+
+	// JSON 형식을 ToString 하여 리턴함
         return Buffer.from(JSON.stringify(allResults));
       }
     }
   }
 
+  //===============================================================================================
+  //  책을 빌려가는 메소드
+  //===============================================================================================
   async loanBook(stub, args) {
-    console.info('============= START : changeCarOwner ===========');
+    console.info('============= 시작 : 책 대출을 시작합니다 ===========');
+
+    // 파라미터의 개수를 확인함
     if (args.length != 2) {
-      throw new Error('Incorrect number of arguments. Expecting 2');
+      throw new Error('파라미터의 개수가 맞지 않습니다. 2개의 파라미터가 필요합니다.');
     }
 
+    // KEY값을 통해 원하는 책을 가져옴
     let bookAsBytes = await stub.getState(args[0]);
     let book = JSON.parse(bookAsBytes);
     book.owner = args[1];
 
+    // 바꾼 내용을 저장함
     await stub.putState(args[0], Buffer.from(JSON.stringify(book)));
-    console.info('============= END : changeCarOwner ===========');
+    console.info('============= 종료 : 책 대출을 종료합니다 ===========');
   }
 };
 
