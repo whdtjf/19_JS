@@ -4,7 +4,7 @@ networks:
 services:
   peer1.org1.example.com:
     container_name: peer1.org1.example.com
-    image: hyperledger/fabric-peer
+    image: jmotacek/fabric-peer:armv7l-1.0.7
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer1.org1.example.com
@@ -29,16 +29,18 @@ services:
         - ./crypto-config/peerOrganizations/org1.example.com/users:/etc/hyperledger/msp/users
         - ./config:/etc/hyperledger/configtx
     extra_hosts:
-    - "orderer.example.com:211.217.202.115"
-    - "peer0.org1.example.com:211.217.202.115"
-    - "ca.example.com:211.217.202.115"
+    - "orderer.example.com:192.168.0.10"
+    - "peer0.org1.example.com:192.168.0.10"
+    - "peer2.org1.example.com:192.168.0.40"
+    - "ca.example.com:192.168.0.10"
     depends_on:
       - couchdb1
     networks:
       - basic
+
   couchdb1:
     container_name: couchdb1
-    image: hyperledger/fabric-couchdb
+    image: jmotacek/fabric-couchdb:armv7l-1.0.7
     environment:
       - COUCHDB_USER=
       - COUCHDB_PASSWORD=
@@ -49,7 +51,7 @@ services:
 
   cli:
     container_name: cli
-    image: hyperledger/fabric-tools
+    image: jmotacek/fabric-tools:armv7l-1.0.7
     tty: true
     environment:
       - GOPATH=/opt/gopath
