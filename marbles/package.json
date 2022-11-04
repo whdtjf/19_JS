@@ -29,7 +29,7 @@
 		"url": "https://github.com/IBM-Blockchain/marbles.git"
 	},
 	"devDependencies": {
-		"gulp": "3.9.*",
+		"gulp": "4.0.*",
 		"gulp-sass": "*",
 		"gulp-concat": "*",
 		"gulp-clean-css": "*",
